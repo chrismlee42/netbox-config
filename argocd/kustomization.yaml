@@ -11,8 +11,8 @@ commonLabels:
 
 resources:
   - httproute.yaml
-  - netbox-postgresql-cluster.yaml
-  - netbox-postgresql-secret.yaml
   - namespace.yaml
-  - superuser-secret.yaml
-  - user-secret.yaml
+  - netbox-postgresql-secret.yaml
+  - postgresql-cluster.yaml
+  - postgresql-superuser-secret.yaml
+  - postgresql-user-secret.yaml
