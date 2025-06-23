@@ -10,6 +10,9 @@ spec:
       owner: netbox
       secret:
         name: netbox-postgresql-user
+  certificates:
+    serverCASecret: postgresql-tls
+    serverTLSSecret: postgresql-tls
   enableSuperuserAccess: true
   imageName: ghcr.io/cloudnative-pg/postgresql:16.3-bookworm
   instances: 1
