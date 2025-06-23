@@ -14,3 +14,5 @@ resources:
   - netbox-postgresql-cluster.yaml
   - netbox-postgresql-secret.yaml
   - namespace.yaml
+  - superuser-secret.yaml
+  - user-secret.yaml

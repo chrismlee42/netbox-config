@@ -4,7 +4,16 @@ metadata:
   name: netbox-postgresql
   namespace: netbox
 spec:
+  bootstrap:
+    initdb:
+      database: netbox
+      owner: netbox
+      secret:
+        name: netbox-postgresql-user
+  enableSuperuserAccess: true
   imageName: ghcr.io/cloudnative-pg/postgresql:16.3-bookworm
   instances: 1
   storage:
-    size: 128i
+    size: 128Mi
+  superuserSecret:
+    name: netbox-postgresql-superuser
