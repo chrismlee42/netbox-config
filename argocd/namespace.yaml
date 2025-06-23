@@ -1,9 +1,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  labels:
-    app: netbox
-    managedBy: argocd
-    managementCodeGroup: chrismlee42-dev
-    managementCodeProject: netbox-config
   name: netbox
