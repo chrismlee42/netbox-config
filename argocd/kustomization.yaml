@@ -15,4 +15,5 @@ resources:
   - postgresql-certificate.yaml
   - postgresql-cluster.yaml
   - postgresql-superuser-secret.yaml
+  - postgresql-tls-secret.yaml
   - postgresql-user-secret.yaml
