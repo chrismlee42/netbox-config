@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgresql
+  namespace: netbox
+spec:
+  commonName: postgresql
+  # Set DNS names to the names of the Postgres hosts
+  dnsNames:
+    - postgresql
+    - postgresql.netbox.svc
+  group: cert-manager.io
+  issuerRef:
+    kind: ClusterIssuer
+    name: self-signed-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  # Secret names are always required.
+  secretName: postgresql-tls
+  usages:
+    - digital signature
+    - key encipherment
