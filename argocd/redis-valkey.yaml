@@ -3,4 +3,5 @@ kind: Valkey
 metadata:
   name: redis
 spec:
+  certIssuer: self-signed-ca
   nodes: 1
