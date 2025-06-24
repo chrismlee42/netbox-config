@@ -9,6 +9,8 @@ commonLabels:
   managementCodeGroup: chrismlee42-dev
   managementCodeProject: netbox-config
 
+namespace: netbox
+
 resources:
   - httproute.yaml
   - namespace.yaml
