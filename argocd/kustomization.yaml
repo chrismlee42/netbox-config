@@ -12,6 +12,7 @@ commonLabels:
 namespace: netbox
 
 resources:
+  - caching-redis-valkey.yaml
   - httproute.yaml
   - namespace.yaml
   - postgresql-certificate.yaml
@@ -19,4 +20,4 @@ resources:
   - postgresql-superuser-secret.yaml
   - postgresql-tls-secret.yaml
   - postgresql-user-secret.yaml
-  - redis-valkey.yaml
+  - tasks-redis-valkey.yaml
