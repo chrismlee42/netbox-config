@@ -3,5 +3,10 @@ kind: Valkey
 metadata:
   name: caching-redis
 spec:
+  anonymousAuth: false
   certIssuer: self-signed-ca
   nodes: 1
+  servicePassword:
+    key: redis-password
+    name: caching-redis
+    optional: false

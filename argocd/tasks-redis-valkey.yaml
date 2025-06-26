@@ -3,5 +3,10 @@ kind: Valkey
 metadata:
   name: tasks-redis
 spec:
+  anonymousAuth: false
   certIssuer: self-signed-ca
   nodes: 1
+  servicePassword:
+    key: redis-password
+    name: tasks-redis
+    optional: false
