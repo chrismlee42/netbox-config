@@ -1,0 +1,7 @@
+apiVersion: hyperspike.io/v1
+kind: Valkey
+metadata:
+  name: caching-redis
+spec:
+  certIssuer: self-signed-ca
+  nodes: 1
