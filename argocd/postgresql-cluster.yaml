@@ -9,7 +9,7 @@ spec:
       database: netbox
       owner: netbox
       secret:
-        name: netbox-postgresql-user
+        name: postgresql-user
   certificates:
     serverCASecret: postgresql-tls
     serverTLSSecret: postgresql-tls
@@ -19,4 +19,4 @@ spec:
   storage:
     size: 128Mi
   superuserSecret:
-    name: netbox-postgresql-superuser
+    name: postgresql-superuser
