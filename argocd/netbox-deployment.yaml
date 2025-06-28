@@ -99,62 +99,6 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
-          volumes:
-            - name: config
-              configMap:
-                name: netbox
-            - name: media
-              persistentVolumeClaim:
-                claimName: netbox-media
-            - name: netbox-tmp
-              emptyDir:
-                medium: Memory
-            - name: optunit
-              emptyDir:
-                medium: Memory
-            - name: reports
-              persistentVolumeClaim:
-                claimName: netbox-reports
-            - name: scripts
-              persistentVolumeClaim:
-                claimName: netbox-scripts
-            - name: secrets
-              projected:
-                sources:
-                  - secret:
-                      name: caching-redis
-                      items:
-                        - key: redis-password
-                          path: cache_password
-                  - secret:
-                      name: netbox-config
-                      items:
-                        - key: email-password
-                          path: email_password
-                  - secret:
-                      name: netbox-config
-                      items:
-                        # - key: ldap_bind_password
-                        #   path: ldap_bind_password
-                        - key: secret_key
-                          path: secret_key
-                  - secret:
-                      name: netbox-superuser
-                      items:
-                        - key: api_token
-                          path: superuser_api_token
-                        - key: password
-                          path: superuser_password
-                  - secret:
-                      name: postgresql-user
-                      items:
-                        - key: password
-                          path: db_password
-                  - secret:
-                      name: tasks-redis
-                      items:
-                        - key: redis-password
-                          path: tasks_password
           volumeMounts:
             - name: config
               mountPath: /etc/netbox/config/configuration.py
@@ -226,3 +170,59 @@ spec:
         fsGroupChangePolicy: Always
         supplementalGroups: []
         sysctls: []
+      volumes:
+        - name: config
+          configMap:
+            name: netbox
+        - name: media
+          persistentVolumeClaim:
+            claimName: netbox-media
+        - name: netbox-tmp
+          emptyDir:
+            medium: Memory
+        - name: optunit
+          emptyDir:
+            medium: Memory
+        - name: reports
+          persistentVolumeClaim:
+            claimName: netbox-reports
+        - name: scripts
+          persistentVolumeClaim:
+            claimName: netbox-scripts
+        - name: secrets
+          projected:
+            sources:
+              - secret:
+                  name: caching-redis
+                  items:
+                    - key: redis-password
+                      path: cache_password
+              - secret:
+                  name: netbox-config
+                  items:
+                    - key: email-password
+                      path: email_password
+              - secret:
+                  name: netbox-config
+                  items:
+                    # - key: ldap_bind_password
+                    #   path: ldap_bind_password
+                    - key: secret_key
+                      path: secret_key
+              - secret:
+                  name: netbox-superuser
+                  items:
+                    - key: api_token
+                      path: superuser_api_token
+                    - key: password
+                      path: superuser_password
+              - secret:
+                  name: postgresql-user
+                  items:
+                    - key: password
+                      path: db_password
+              - secret:
+                  name: tasks-redis
+                  items:
+                    - key: redis-password
+                      path: tasks_password
