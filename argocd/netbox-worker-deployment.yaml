@@ -151,7 +151,7 @@ spec:
                     - key: password
                       path: superuser_password
               - secret:
-                  name: postgresql-user
+                  name: postgresql-app
                   items:
                     - key: password
                       path: db_password

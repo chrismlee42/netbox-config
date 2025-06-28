@@ -34,8 +34,8 @@ resources:
   - netbox-worker-horizontalpodautoscaler.yaml
   - postgresql-certificate.yaml
   - postgresql-cluster.yaml
-  - postgresql-superuser-secret.yaml
+  # - postgresql-superuser-secret.yaml
   - postgresql-tls-secret.yaml
-  - postgresql-user-secret.yaml
+  # - postgresql-user-secret.yaml
   - tasks-redis-secret.yaml
   - tasks-redis-valkey.yaml
