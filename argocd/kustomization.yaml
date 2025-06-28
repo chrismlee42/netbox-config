@@ -14,8 +14,24 @@ namespace: netbox
 resources:
   - caching-redis-secret.yaml
   - caching-redis-valkey.yaml
+  - housekeeping-cronjob.yaml
   - httproute.yaml
   - namespace.yaml
+  - netbox-config-secret.yaml
+  - netbox-configmap.yaml
+  - netbox-deployment.yaml
+  - netbox-horizontalpodautoscaler.yaml
+  - netbox-ingress.yaml
+  - netbox-media-persistentvolumeclaim.yaml
+  - netbox-reports-persistentvolumeclaim.yaml
+  - netbox-role.yaml
+  - netbox-rolebinding.yaml
+  - netbox-scripts-persistentvolumeclaim.yaml
+  - netbox-service.yaml
+  - netbox-serviceaccount.yaml
+  # - netbox-servicemonitor.yaml
+  - netbox-worker-deployment.yaml
+  - netbox-worker-horizontalpodautoscaler.yaml
   - postgresql-certificate.yaml
   - postgresql-cluster.yaml
   - postgresql-superuser-secret.yaml

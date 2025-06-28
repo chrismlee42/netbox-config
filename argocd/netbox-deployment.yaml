@@ -1,0 +1,228 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbox
+  labels:
+    app.kubernetes.io/component: netbox
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: netbox
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/component: netbox
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: netbox
+          env:
+            - name: SUPERUSER_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: netbox-superuser
+            - name: SUPERUSER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: email
+                  name: netbox-superuser
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          image: ghcr.io/netbox-community/netbox:v4.3.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status/applications/netbox/processes/running
+              port: nginx-status
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: nginx-status
+              containerPort: 8081
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /login/
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 375m
+              # cpu: 750m
+              memory: 384Mi
+              # memory: 1536Mi
+            requests:
+              cpu: 250m
+              # cpu: 500m
+              memory: 256Mi
+              # memory: 1024Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+          startupProbe:
+            failureThreshold: 100
+            httpGet:
+              path: /login/
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumes:
+            - name: config
+              configMap:
+                name: netbox
+            - name: media
+              persistentVolumeClaim:
+                claimName: netbox-media
+            - name: netbox-tmp
+              emptyDir:
+                medium: Memory
+            - name: optunit
+              emptyDir:
+                medium: Memory
+            - name: reports
+              persistentVolumeClaim:
+                claimName: netbox-reports
+            - name: scripts
+              persistentVolumeClaim:
+                claimName: netbox-scripts
+            - name: secrets
+              projected:
+                sources:
+                  - secret:
+                      name: caching-redis
+                      items:
+                        - key: redis-password
+                          path: cache_password
+                  - secret:
+                      name: netbox-config
+                      items:
+                        - key: email-password
+                          path: email_password
+                  - secret:
+                      name: netbox-config
+                      items:
+                        # - key: ldap_bind_password
+                        #   path: ldap_bind_password
+                        - key: secret_key
+                          path: secret_key
+                  - secret:
+                      name: netbox-superuser
+                      items:
+                        - key: api_token
+                          path: superuser_api_token
+                        - key: password
+                          path: superuser_password
+                  - secret:
+                      name: postgresql-user
+                      items:
+                        - key: password
+                          path: db_password
+                  - secret:
+                      name: tasks-redis
+                      items:
+                        - key: redis-password
+                          path: tasks_password
+          volumeMounts:
+            - name: config
+              mountPath: /etc/netbox/config/configuration.py
+              subPath: configuration.py
+              readOnly: true
+            # - name: config
+            #   mountPath: /etc/netbox/config/ldap/ldap_config.py
+            #   subPath: ldap_config.py
+            #   readOnly: true
+            # - name: config
+            #   mountPath: /etc/netbox/config/ldap/ldap_ca.crt
+            #   subPath: ldap_ca.crt
+            #   readOnly: true
+            - name: config
+              mountPath: /run/config/netbox
+              readOnly: true
+            - name: media
+              mountPath: /opt/netbox/netbox/media
+              readOnly: true
+            - name: netbox-tmp
+              mountPath: /tmp
+            - name: optunit
+              mountPath: /opt/unit
+            - name: reports
+              mountPath: /opt/netbox/netbox/reports
+            - name: scripts
+              mountPath: /opt/netbox/netbox/scripts
+            - name: secrets
+              mountPath: /run/secrets/netbox
+            - name: secrets
+              mountPath: /run/secrets/superuser_password
+              subPath: superuser_password
+              readOnly: true
+            - name: secrets
+              mountPath: /run/secrets/superuser_api_token
+              subPath: superuser_api_token
+              readOnly: true
+      initContainers:
+        - name: init-dirs
+          command:
+            - /bin/sh
+            - -c
+            - mkdir -p /opt/unit/state /opt/unit/tmp
+          image: docker.io/busybox:1.37.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 150m
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+          volumeMounts:
+            - name: optunit
+              mountPath: /opt/unit
+      serviceAccountName: netbox
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []

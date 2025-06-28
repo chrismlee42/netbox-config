@@ -1,0 +1,162 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbox-worker
+  labels:
+    app.kubernetes.io/component: worker
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: worker
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: worker
+    spec:
+      automountServiceAccountToken: true
+      containers:
+        - name: netbox-worker
+          command:
+            - /opt/netbox/venv/bin/python
+            - /opt/netbox/netbox/manage.py
+            - rqworker
+          image: ghcr.io/netbox-community/netbox:v4.3.2
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 750m
+              memory: 1536Mi
+            requests:
+              cpu: 500m
+              memory: 1024Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+            seLinuxOptions: {}
+          volumes:
+            - name: config
+              configMap:
+                name: netbox
+            - name: media
+              persistentVolumeClaim:
+                claimName: netbox-media
+            - name: netbox-tmp
+              emptyDir:
+                medium: Memory
+            - name: reports
+              persistentVolumeClaim:
+                claimName: netbox-reports
+            - name: scripts
+              persistentVolumeClaim:
+                claimName: netbox-scripts
+            - name: secrets
+              projected:
+                sources:
+                  - secret:
+                      name: caching-redis
+                      items:
+                        - key: redis-password
+                          path: cache_password
+                  - secret:
+                      name: netbox-config
+                      items:
+                        - key: email-password
+                          path: email_password
+                  - secret:
+                      name: netbox-config
+                      items:
+                        # - key: ldap_bind_password
+                        #   path: ldap_bind_password
+                        - key: secret_key
+                          path: secret_key
+                  - secret:
+                      name: netbox-superuser
+                      items:
+                        - key: api_token
+                          path: superuser_api_token
+                        - key: password
+                          path: superuser_password
+                  - secret:
+                      name: postgresql-user
+                      items:
+                        - key: password
+                          path: db_password
+                  - secret:
+                      name: tasks-redis
+                      items:
+                        - key: redis-password
+                          path: tasks_password
+          volumeMounts:
+            - name: config
+              mountPath: /etc/netbox/config/configuration.py
+              subPath: configuration.py
+              readOnly: true
+            # - name: config
+            #   mountPath: /etc/netbox/config/ldap/ldap_config.py
+            #   subPath: ldap_config.py
+            #   readOnly: true
+            # - name: config
+            #   mountPath: /etc/netbox/config/ldap/ldap_ca.crt
+            #   subPath: ldap_ca.crt
+            #   readOnly: true
+            - name: config
+              mountPath: /run/config/netbox
+              readOnly: true
+            - name: media
+              mountPath: /opt/netbox/netbox/media
+            - name: netbox-tmp
+              mountPath: /tmp
+            - name: reports
+              mountPath: /opt/netbox/netbox/reports
+            - name: scripts
+              mountPath: /opt/netbox/netbox/scripts
+            - name: secrets
+              mountPath: /run/secrets/netbox
+              readOnly: true
+      initContainers:
+        - name: wait-for-backend
+          args:
+            - |
+              deployment=${DEPLOYMENT_NAME:?deployment name is missing}
+              return_code=0
+
+              echo "Waiting for deployment \"${deployment}\" to be successfully rolled out..."
+              kubectl rollout status deployment "$deployment" 2>&1 || return_code=$?
+              echo "Rollout exit code: '${return_code}'"
+              exit $return_code
+          command:
+            - /bin/bash
+            - -ec
+          env:
+            - name: DEPLOYMENT_NAME
+              value: netbox
+          image: alpine/k8s:1.30.14
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 150m
+              memory: 192Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      serviceAccountName: netbox
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []

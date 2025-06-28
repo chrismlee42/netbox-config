@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: netbox
+spec:
+  jobLabel: netbox
+  namespaceSelector:
+    matchNames:
+    - netbox
+  endpoints:
+  - port: http
+    path: "/metrics"
