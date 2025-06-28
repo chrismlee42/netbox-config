@@ -77,9 +77,9 @@ spec:
             - name: netbox-tmp
               emptyDir:
                 medium: Memory
-            # - name: reports
-            #   persistentVolumeClaim:
-            #     claimName: netbox-reports
+            - name: reports
+              persistentVolumeClaim:
+                claimName: netbox-reports
             - name: scripts
               persistentVolumeClaim:
                 claimName: netbox-scripts
