@@ -21,7 +21,7 @@ resources:
   - netbox-configmap.yaml
   - netbox-deployment.yaml
   - netbox-horizontalpodautoscaler.yaml
-  - netbox-ingress.yaml
+  # - netbox-ingress.yaml
   - netbox-media-persistentvolumeclaim.yaml
   - netbox-reports-persistentvolumeclaim.yaml
   - netbox-role.yaml
