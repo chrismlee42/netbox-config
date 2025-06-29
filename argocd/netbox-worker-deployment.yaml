@@ -134,7 +134,7 @@ spec:
               - secret:
                   name: netbox-config
                   items:
-                    - key: email-password
+                    - key: email_password
                       path: email_password
               - secret:
                   name: netbox-config
