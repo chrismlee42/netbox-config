@@ -19,7 +19,7 @@ resources:
   - namespace.yaml
   - netbox-config-secret.yaml
   - netbox-configmap.yaml
-  - netbox-deployment.yaml
+  # - netbox-deployment.yaml
   - netbox-horizontalpodautoscaler.yaml
   # - netbox-ingress.yaml
   - netbox-media-persistentvolumeclaim.yaml
