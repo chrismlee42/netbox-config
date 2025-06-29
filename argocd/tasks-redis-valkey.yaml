@@ -5,8 +5,11 @@ metadata:
 spec:
   anonymousAuth: false
   certIssuer: self-signed-ca
+  certIssuerType: ClusterIssuer
   nodes: 1
+  replicas: 1
   servicePassword:
     key: redis-password
     name: tasks-redis
     optional: false
+  tls: true
