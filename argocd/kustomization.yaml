@@ -30,6 +30,7 @@ resources:
   - netbox-service.yaml
   - netbox-serviceaccount.yaml
   # - netbox-servicemonitor.yaml
+  - netbox-superuser-secret.yaml
   - netbox-worker-deployment.yaml
   - netbox-worker-horizontalpodautoscaler.yaml
   - postgresql-certificate.yaml
