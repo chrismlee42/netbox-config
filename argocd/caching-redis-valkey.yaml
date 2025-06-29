@@ -8,7 +8,7 @@ spec:
   certIssuerType: ClusterIssuer
   nodes: 1
   servicePassword:
-    key: redis-password
+    key: password
     name: caching-redis
     optional: false
   # tls: true
