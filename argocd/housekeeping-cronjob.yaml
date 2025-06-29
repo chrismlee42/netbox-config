@@ -90,7 +90,7 @@ spec:
                       name: caching-redis
                       items:
                         - key: password
-                          path: redis_cache_password
+                          path: cache_password
                   - secret:
                       name: netbox-config
                       items:
@@ -109,4 +109,4 @@ spec:
                       name: tasks-redis
                       items:
                         - key: password
-                          path: redis_tasks_password
+                          path: tasks_password
