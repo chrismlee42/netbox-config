@@ -168,7 +168,7 @@ data:
 
     REDIS:
       tasks:
-        HOST: task-redis
+        HOST: tasks-redis
         PORT: 6379
         USERNAME: ""
         DATABASE: 0
