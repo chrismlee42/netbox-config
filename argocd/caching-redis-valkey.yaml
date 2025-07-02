@@ -6,7 +6,7 @@ spec:
   anonymousAuth: false
   certIssuer: self-signed-ca
   certIssuerType: ClusterIssuer
-  nodes: 3
+  nodes: 1
   servicePassword:
     key: password
     name: caching-redis
