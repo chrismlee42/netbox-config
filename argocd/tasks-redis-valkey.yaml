@@ -6,7 +6,7 @@ spec:
   anonymousAuth: false
   certIssuer: self-signed-ca
   certIssuerType: ClusterIssuer
-  nodes: 1
+  nodes: 3
   servicePassword:
     key: password
     name: tasks-redis
