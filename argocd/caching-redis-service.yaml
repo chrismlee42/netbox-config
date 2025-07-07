@@ -4,7 +4,8 @@ metadata:
   name: caching-redis
 spec:
   selector:
-    app: caching-redis
+    matchLabels:
+      app.kubernetes.io/component: caching-redis
   ports:
     - protocol: TCP
       port: 6379

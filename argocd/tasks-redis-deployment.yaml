@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tasks-redis
+      app.kubernetes.io/component: tasks-redis
   template:
     metadata:
       labels:
-        app: tasks-redis
+        app.kubernetes.io/component: tasks-redis
     spec:
       containers:
       - name: redis

@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: caching-redis
+      app.kubernetes.io/component: caching-redis
   template:
     metadata:
       labels:
-        app: caching-redis
+        app.kubernetes.io/component: caching-redis
     spec:
       containers:
       - name: redis
