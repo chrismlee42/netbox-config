@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasks-redis
+  template:
+    metadata:
+      labels:
+        app: tasks-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
