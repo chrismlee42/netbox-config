@@ -4,6 +4,9 @@ metadata:
   name: caching-redis
 spec:
   selector:
+    matchExpressions:
+      - key: app.kubernetes.io/component
+        operator: Exists
     matchLabels:
       app.kubernetes.io/component: caching-redis
   ports:

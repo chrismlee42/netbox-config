@@ -5,6 +5,9 @@ metadata:
 spec:
   replicas: 1
   selector:
+    matchExpressions:
+      - key: app.kubernetes.io/component
+        operator: Exists
     matchLabels:
       app.kubernetes.io/component: tasks-redis
   template:
