@@ -4,11 +4,7 @@ metadata:
   name: tasks-redis
 spec:
   selector:
-    matchExpressions:
-      - key: app.kubernetes.io/component
-        operator: Exists
-    matchLabels:
-      app.kubernetes.io/component: tasks-redis
+    app.kubernetes.io/component: tasks-redis
   ports:
     - protocol: TCP
       port: 6379
