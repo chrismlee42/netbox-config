@@ -16,7 +16,7 @@ resources:
   - caching-redis-secret.yaml
   - caching-redis-service.yaml
   # - caching-redis-valkey.yaml
-  - housekeeping-cronjob.yaml
+  # - housekeeping-cronjob.yaml
   - httproute.yaml
   - namespace.yaml
   - netbox-config-secret.yaml
