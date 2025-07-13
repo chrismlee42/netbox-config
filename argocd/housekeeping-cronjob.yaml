@@ -37,8 +37,8 @@ spec:
                 runAsNonRoot: true
                 runAsUser: 1000
                 seccompProfile:
+                  type: "RuntimeDefault"
                 seLinuxOptions: {}
-                type: "RuntimeDefault"
               volumeMounts:
                 - name: config
                   mountPath: /etc/netbox/config/configuration.py
