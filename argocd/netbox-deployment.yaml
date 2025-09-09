@@ -39,7 +39,7 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-          image: ghcr.io/netbox-community/netbox:v4.3.3
+          image: ghcr.io/netbox-community/netbox:v4.4.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
