@@ -3,11 +3,13 @@ kind: Kustomization
 metadata:
   name: netbox-config
 
-commonLabels:
-  app: netbox
-  managedBy: argocd
-  managementCodeGroup: chrismlee42
-  managementCodeProject: netbox-config
+labels:
+  - includeSelectors: true
+    pairs:
+      app: netbox
+      managedBy: argocd
+      managementCodeGroup: chrismlee42
+      managementCodeProject: netbox-config
 
 namespace: netbox
 
